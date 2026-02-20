@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>News - SG Developer Monitor</title>
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+</head>
+<body>
+  <header>
+    <h2 style="margin:0 0 0.5rem;">Developer News</h2>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./macro.html">Macro</a>
+      <a class="active" href="./news.html">Developer News</a>
+      <a href="./listed.html">Listed Developers</a>
+    </nav>
+  </header>
+  <main>
+    <p id="news-updated" class="small"></p>
+    <div class="card" style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:end;">
+      <div>
+        <label for="severity-filter" class="small">Severity</label><br />
+        <select id="severity-filter">
+          <option value="all">All</option>
+          <option value="critical">Critical</option>
+          <option value="warning">Warning</option>
+          <option value="watch">Watch</option>
+          <option value="info">Info</option>
+        </select>
+      </div>
+      <div>
+        <label for="text-filter" class="small">Search</label><br />
+        <input id="text-filter" type="text" placeholder="Company, tag, outlet..." />
+      </div>
+    </div>
+    <div id="news-list"></div>
+  </main>
+  <script src="./assets/js/common.js"></script>
+  <script src="./assets/js/news.js"></script>
+</body>
+</html>

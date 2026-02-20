@@ -1,0 +1,91 @@
+:root {
+  --bg: #0b1220;
+  --panel: #111a2f;
+  --text: #e5ebf7;
+  --muted: #9fb0d1;
+  --accent: #4ea1ff;
+  --green: #1ea672;
+  --amber: #d19a1a;
+  --red: #d64545;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: linear-gradient(180deg, #09101d, #101a30);
+  color: var(--text);
+}
+header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #243152;
+  background: #0b1427;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+nav a {
+  color: var(--muted);
+  margin-right: 1rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+nav a.active, nav a:hover { color: #fff; }
+main { max-width: 1100px; margin: 1rem auto 3rem; padding: 0 1rem; }
+.card {
+  background: var(--panel);
+  border: 1px solid #223153;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.small { color: var(--muted); font-size: 0.9rem; }
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.badge-critical { background: rgba(214,69,69,0.2); color: #ff8b8b; }
+.badge-warning { background: rgba(209,154,26,0.2); color: #f7cc67; }
+.badge-watch { background: rgba(78,161,255,0.2); color: #7fc0ff; }
+.badge-info { background: rgba(95,170,120,0.2); color: #7ce0a5; }
+.tag {
+  font-size: 0.75rem;
+  color: #bdd4ff;
+  border: 1px solid #395b94;
+  border-radius: 999px;
+  padding: 0.15rem 0.45rem;
+  margin-right: 0.35rem;
+}
+input, select {
+  background: #0a1326;
+  border: 1px solid #2c4069;
+  color: #e8f0ff;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 0.6rem; border-bottom: 1px solid #243356; }
+.status-pill { font-weight: 700; }
+.status-green { color: var(--green); }
+.status-amber { color: var(--amber); }
+.status-red { color: var(--red); }
+button.explain-btn {
+  background: transparent;
+  border: 1px solid #3a5588;
+  color: #c7dbff;
+  border-radius: 6px;
+  padding: 0.25rem 0.55rem;
+  cursor: pointer;
+}
+.no-data {
+  padding: 1rem;
+  border: 1px dashed #3a4f7e;
+  border-radius: 8px;
+  color: var(--muted);
+}

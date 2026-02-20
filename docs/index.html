@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SG Developer Vulnerability Monitor</title>
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+</head>
+<body>
+  <header>
+    <h2 style="margin:0 0 0.5rem;">Singapore Property Developer Vulnerability Monitor (POC)</h2>
+    <nav>
+      <a class="active" href="./index.html">Home</a>
+      <a href="./macro.html">Macro</a>
+      <a href="./news.html">Developer News</a>
+      <a href="./listed.html">Listed Developers</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card">
+      <h3>Overview</h3>
+      <p>This static GitHub Pages dashboard monitors vulnerability signals for Singapore property developers.</p>
+      <ul>
+        <li><strong>Macro:</strong> market and financing trend charts.</li>
+        <li><strong>Developer News:</strong> classified risk headlines with severity tags.</li>
+        <li><strong>Listed Developers:</strong> leverage/liquidity ratios with composite health scoring.</li>
+      </ul>
+      <p class="small">Data source for this POC is generated mock JSON in <code>/public/data</code> by GitHub Actions.</p>
+    </div>
+
+    <div class="grid-3">
+      <a class="card" href="./macro.html" style="text-decoration:none;color:inherit;"><h3>Macro (SG)</h3><p>Three key time series visualizations.</p></a>
+      <a class="card" href="./news.html" style="text-decoration:none;color:inherit;"><h3>Developer News</h3><p>RSS-style feed with regex risk tags and filters.</p></a>
+      <a class="card" href="./listed.html" style="text-decoration:none;color:inherit;"><h3>Listed Developers</h3><p>Health score table with explanatory drivers.</p></a>
+    </div>
+  </main>
+</body>
+</html>

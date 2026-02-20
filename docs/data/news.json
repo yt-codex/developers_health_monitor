@@ -1,0 +1,88 @@
+{
+  "updated_at": "2026-02-20T16:17:48.170224+00:00",
+  "items": [
+    {
+      "title": "UOL Group reports resilient liquidity position in latest update",
+      "outlet": "SG Investors",
+      "summary": "Management highlighted conservative balance sheet and rating stability.",
+      "url": "https://example.com/news/uol-liquidity",
+      "published_at": "2025-01-20",
+      "tags": [
+        "refinancing",
+        "ratings"
+      ],
+      "severity": "info",
+      "entities": [
+        "UOL Group"
+      ]
+    },
+    {
+      "title": "Legal filing seeks winding up of small contractor tied to project",
+      "outlet": "Straits Times",
+      "summary": "No immediate default by listed sponsor was disclosed.",
+      "url": "https://example.com/news/winding-up-filing",
+      "published_at": "2025-01-19",
+      "tags": [
+        "legal"
+      ],
+      "severity": "critical",
+      "entities": []
+    },
+    {
+      "title": "CapitaLand Investment sees stable sales despite price cut campaign",
+      "outlet": "CNA",
+      "summary": "Bulk sale discount strategy used to sustain momentum in select assets.",
+      "url": "https://example.com/news/cli-price-cut",
+      "published_at": "2025-01-18",
+      "tags": [
+        "distress_sale"
+      ],
+      "severity": "watch",
+      "entities": [
+        "CapitaLand Investment"
+      ]
+    },
+    {
+      "title": "Mapletree Pan Asia Commercial Trust receives covenant waiver from lenders",
+      "outlet": "Reuters",
+      "summary": "Waiver tied to temporary covenant breach after valuation decline.",
+      "url": "https://example.com/news/mpact-waiver",
+      "published_at": "2025-01-17",
+      "tags": [
+        "covenant"
+      ],
+      "severity": "warning",
+      "entities": [
+        "Mapletree Pan Asia Commercial Trust"
+      ]
+    },
+    {
+      "title": "GuocoLand reports construction delay at flagship mixed-use project",
+      "outlet": "The Edge Singapore",
+      "summary": "Delay may push TOP timelines and raise carrying costs.",
+      "url": "https://example.com/news/guocoland-delay",
+      "published_at": "2025-01-16",
+      "tags": [
+        "project_delay"
+      ],
+      "severity": "watch",
+      "entities": [
+        "GuocoLand"
+      ]
+    },
+    {
+      "title": "City Developments secures bridge loan ahead of debt maturity",
+      "outlet": "Business Times",
+      "summary": "The group refinanced a major facility as liquidity planning intensifies.",
+      "url": "https://example.com/news/cdl-bridge-loan",
+      "published_at": "2025-01-15",
+      "tags": [
+        "refinancing"
+      ],
+      "severity": "warning",
+      "entities": [
+        "City Developments"
+      ]
+    }
+  ]
+}
