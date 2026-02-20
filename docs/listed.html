@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Listed Developers - SG Developer Monitor</title>
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+</head>
+<body>
+  <header>
+    <h2 style="margin:0 0 0.5rem;">Listed Developers</h2>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./macro.html">Macro</a>
+      <a href="./news.html">Developer News</a>
+      <a class="active" href="./listed.html">Listed Developers</a>
+    </nav>
+  </header>
+  <main>
+    <p id="listed-updated" class="small"></p>
+    <div id="listed-table-wrap" class="card table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Company</th>
+            <th>Net Debt / Equity</th>
+            <th>Net Debt / EBITDA</th>
+            <th>Cash / Short Debt</th>
+            <th>Quick Ratio</th>
+            <th>Health Score</th>
+            <th>Status</th>
+            <th>Explain</th>
+          </tr>
+        </thead>
+        <tbody id="listed-body"></tbody>
+      </table>
+    </div>
+  </main>
+  <script src="./assets/js/common.js"></script>
+  <script src="./assets/js/listed.js"></script>
+</body>
+</html>

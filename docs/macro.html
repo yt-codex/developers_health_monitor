@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Macro - SG Developer Monitor</title>
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h2 style="margin:0 0 0.5rem;">Macro Dashboard (Singapore)</h2>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a class="active" href="./macro.html">Macro</a>
+      <a href="./news.html">Developer News</a>
+      <a href="./listed.html">Listed Developers</a>
+    </nav>
+  </header>
+  <main id="macro-content">
+    <p id="macro-updated" class="small"></p>
+    <div class="card"><h3>HDB Resale Price Index</h3><div style="height:280px"><canvas id="hdb-chart"></canvas></div></div>
+    <div class="card"><h3>Private Residential Price Index</h3><div style="height:280px"><canvas id="private-chart"></canvas></div></div>
+    <div class="card"><h3>Mortgage Proxy Rate (3M)</h3><div style="height:280px"><canvas id="rate-chart"></canvas></div></div>
+  </main>
+  <script src="./assets/js/common.js"></script>
+  <script src="./assets/js/macro.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "updated_at": "2026-02-20T16:17:48.171265+00:00",
+  "pipeline": "mock_build",
+  "ok": true,
+  "errors": [],
+  "notes": [
+    "POC mode with deterministic mock data.",
+    "TODO: Replace mock fetchers with live connectors for macro, news, and ratios."
+  ]
+}
