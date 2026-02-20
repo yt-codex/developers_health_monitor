@@ -19,9 +19,15 @@
   </header>
   <main id="macro-content">
     <p id="macro-updated" class="small"></p>
-    <div class="card"><h3>HDB Resale Price Index</h3><div style="height:280px"><canvas id="hdb-chart"></canvas></div></div>
-    <div class="card"><h3>Private Residential Price Index</h3><div style="height:280px"><canvas id="private-chart"></canvas></div></div>
-    <div class="card"><h3>Mortgage Proxy Rate (3M)</h3><div style="height:280px"><canvas id="rate-chart"></canvas></div></div>
+    <div id="macro-warning" class="card" style="display:none; border:1px solid #f59e0b; color:#f59e0b;"></div>
+
+    <div class="card"><h3>SORA</h3><p id="sora-last" class="small"></p><div style="height:280px"><canvas id="sora-chart"></canvas></div></div>
+    <div class="card"><h3>SGS Yields + Curve Slope</h3><p id="yields-last" class="small"></p><div style="height:280px"><canvas id="yields-chart"></canvas></div></div>
+    <div class="card"><h3>Private Residential Price Index</h3><p id="price-last" class="small"></p><div style="height:280px"><canvas id="price-chart"></canvas></div></div>
+    <div class="card"><h3>Private Residential Rental Index</h3><p id="rental-last" class="small"></p><div style="height:280px"><canvas id="rental-chart"></canvas></div></div>
+    <div class="card"><h3>Private Residential Transactions</h3><p id="transactions-last" class="small"></p><div style="height:280px"><canvas id="transactions-chart"></canvas></div></div>
+    <div class="card"><h3>Developers' Sales Proxy</h3><p id="dev-sales-last" class="small"></p><div style="height:280px"><canvas id="dev-sales-chart"></canvas></div></div>
+    <div class="card"><h3>Construction Material Prices</h3><p id="construction-last" class="small"></p><div style="height:280px"><canvas id="construction-chart"></canvas></div></div>
   </main>
   <script src="./assets/js/common.js"></script>
   <script src="./assets/js/macro.js"></script>

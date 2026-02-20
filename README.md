@@ -2,115 +2,114 @@
 
 GitHub Pages-hosted static dashboard for monitoring vulnerability signals across Singapore property developers.
 
-## What this POC includes
+## What this includes
 
-- **Static frontend** (`/public`) with 3 dashboard pages:
-  - `macro.html`: three macro time-series charts from `public/data/macro.json`
-  - `news.html`: article feed with regex risk tags and severity filtering from `public/data/news.json`
-  - `listed.html`: listed developer ratio table with composite health scores and expandable explanations from `public/data/listed.json`
-- **Mock data pipeline** (`scripts/build_data.py`) that generates deterministic JSON outputs.
-- **GitHub Actions job** (`.github/workflows/build-data.yml`) to regenerate and commit `public/data/*.json` every 6 hours or on demand.
+- **Static frontend** (`/public`) with 3 dashboard pages.
+- **Macro data pipeline** (`scripts/fetch_macro.py`) that resolves and fetches macro datasets from **data.gov.sg CKAN API** (plus optional SingStat endpoint reference for future extension).
+- **Mock listed/news pipeline** (`scripts/build_data.py`) for deterministic POC content.
+- **GitHub Actions job** (`.github/workflows/build-data.yml`) to regenerate and commit JSON assets.
 
-## Repo layout
+## Macro pipeline design
 
-```text
-public/
-  index.html
-  macro.html
-  news.html
-  listed.html
-  assets/
-    css/styles.css
-    js/common.js
-    js/macro.js
-    js/news.js
-    js/listed.js
-  data/
-    macro.json
-    news.json
-    listed.json
-    status.json
-scripts/
-  build_data.py
-  fetch_rss.py
-  fetch_macro.py
-  fetch_ratios.py
-.github/workflows/
-  build-data.yml
+### 1) Series resolution
+
+`fetch_macro.py` hardcodes only **series intents**, not brittle resource IDs. Each intent defines:
+
+- `id`
+- `display_name`
+- `frequency`
+- `source`
+- `candidate_queries`
+- `preferred_date_columns`
+- `preferred_value_columns`
+
+Resolver flow:
+
+1. Call `package_search` for each candidate query.
+2. Score package matches using title token overlap, agency hints (MAS/URA/SingStat/BCA), and metadata freshness.
+3. Pick the best package and first CSV resource.
+4. Download CSV and parse with pandas.
+
+### 2) Parsing + normalization
+
+- Date/period fields are detected via preferred column names + heuristics.
+- Values are parsed numerically with NA handling.
+- Period format normalization:
+  - daily/monthly => ISO date (`YYYY-MM-DD`)
+  - quarterly => `YYYY-Q#`
+- Series are sorted ascending and deduplicated by period.
+
+### 3) Derived metrics
+
+- `yield_curve_slope = yield_10y - yield_2y` (or `yield_10y - yield_1y` fallback).
+- Optional 3-period MAs for transactions and developers' uncompleted sales when enough history exists.
+
+### 4) Status and resilience
+
+Pipeline writes:
+
+- `public/data/macro.json`
+- `public/data/status.json`
+
+The pipeline is best-effort: if a dataset is missing/unparseable, series are emitted with empty `data` and the failure is recorded in `status.json`.
+
+## Macro JSON schema
+
+`macro.json`:
+
+```json
+{
+  "meta": {"generated_utc": "...", "sources": {}, "notes": []},
+  "series": {
+    "series_id": {
+      "display_name": "...",
+      "frequency": "daily|monthly|quarterly",
+      "unit": "...",
+      "source": {"name": "data.gov.sg", "dataset_title": "...", "resource_url": "..."},
+      "last_observation_period": "...",
+      "data": [{"period": "...", "value": 123.4}]
+    }
+  }
+}
 ```
+
+`status.json`:
+
+```json
+{
+  "last_run_utc": "...",
+  "ok": false,
+  "series_status": {"series_id": {"ok": false, "last_period": null, "error": "..."}},
+  "source_status": {"data_gov_sg": {"ok": true, "error": ""}, "singstat": {"ok": true, "error": ""}},
+  "errors": []
+}
+```
+
+## How to add a new macro series
+
+1. Open `scripts/fetch_macro.py`.
+2. Add a new `SeriesIntent` in `SERIES_INTENTS`.
+3. Fill in candidate queries and preferred columns.
+4. (Optional) add filters/derived logic.
+5. Run:
+
+```bash
+python scripts/fetch_macro.py --out public/data/macro.json --status public/data/status.json
+```
+
+## Troubleshooting
+
+- **Series missing**: broaden `candidate_queries`, adjust `preferred_*_columns`.
+- **Wrong values**: check value column inference and add stronger preferred names.
+- **Quarter parsing issues**: update `normalize_period` regex for new source formats.
+- **Workflow no commit**: verify `public/` or `docs/` actually changed.
 
 ## Local run
 
-1. Generate mock data:
-
 ```bash
 python scripts/build_data.py
+python scripts/fetch_macro.py --out public/data/macro.json --status public/data/status.json
+cd public && python -m http.server 8000
 ```
 
-2. Serve the static site from `public/`:
-
-```bash
-cd public
-python -m http.server 8000
-```
-
-3. Open `http://localhost:8000`.
-
-## GitHub Pages deployment
-
-Because this is a static site, it can be hosted directly on GitHub Pages.
-
-### Option A: Deploy from `/docs` (recommended by Pages UI)
-
-GitHub Pages natively supports `/docs` or root for branch deployments. If you prefer native Pages without an extra action:
-
-1. Copy/sync `public/` to `/docs` in your branch, **or** set up a small sync step in your workflow.
-2. In GitHub repo settings: **Pages** → **Build and deployment** → **Deploy from a branch**.
-3. Select branch `main` and folder `/docs`.
-
-### Option B: Deploy `public/` with a Pages workflow
-
-Use a GitHub Pages workflow that uploads `public/` as the artifact. (Good when you want to keep `/public` as source of truth.)
-
-> This repository currently includes only the data-build workflow. Add a Pages deploy workflow when you are ready to publish.
-
-## Data model and scoring
-
-`build_data.py` computes a **0–100 health score** (`higher = healthier`) using:
-
-- Leverage penalties: `net_debt_to_equity`, `net_debt_to_ebitda`
-- Liquidity penalties: `cash_to_short_debt`, `quick_ratio` (if present)
-- Deterioration penalties when leverage worsens vs prior period
-
-Status thresholds:
-
-- `Green` >= 70
-- `Amber` 40–69
-- `Red` < 40
-
-## News taxonomy (current mock implementation)
-
-Themes and keywords:
-
-- `refinancing`: refinanc|facility|bridge loan|maturity|liquidity
-- `covenant`: covenant|waiver|breach
-- `distress_sale`: discount|price cut|bulk sale|fire sale
-- `project_delay`: delay|stop work|construction|TOP
-- `legal`: winding up|lawsuit|judicial management|default
-- `ratings`: downgrade|negative outlook|rating
-
-Severity mapping:
-
-- `critical`: legal/default/winding up
-- `warning`: covenant breach/waiver or refinancing/bridge loan
-- `watch`: distress sale/project delay/weak sales
-- `info`: otherwise
-
-Entity matching is also attempted using company names from listed developers.
-
-## Future integration TODOs
-
-- `scripts/fetch_macro.py`: data.gov.sg / SingStat / URA ingestion.
-- `scripts/fetch_rss.py`: RSS fetch + normalize + classify.
-- `scripts/fetch_ratios.py`: best-effort ratio parsing (e.g., StockAnalysis SGX pages).
-
+Open `http://localhost:8000/macro.html`.
