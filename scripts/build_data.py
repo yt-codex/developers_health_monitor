@@ -1,15 +1,8 @@
 #!/usr/bin/env python3
-"""Build mock JSON datasets for the GitHub Pages dashboard.
+"""Build dashboard JSON datasets.
 
-POC behavior:
-- Generates deterministic mock macro, news, and listed developer datasets.
-- Applies risk classification and composite health scoring.
-- Writes data files into /public/data.
-
-TODO (future integration):
-- Replace mock macro generation with data.gov.sg / SingStat / URA ingestion.
-- Replace mock news list with RSS ingestion + normalization.
-- Replace mock listed ratios with best-effort parsing of public ratio pages.
+- listed.json and news.json are deterministic mocks for the POC.
+- macro.json and status.json are generated via scripts/fetch_macro.py logic.
 """
 
 from __future__ import annotations
@@ -21,6 +14,8 @@ from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from fetch_macro import run_fetch
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "public" / "data"
@@ -55,31 +50,21 @@ class ListedDeveloper:
 
 def compute_health(dev: ListedDeveloper) -> dict[str, Any]:
     score = 100.0
-
-    # Penalize leverage.
     score -= min(45.0, dev.net_debt_to_equity * 18.0)
     score -= min(20.0, max(0.0, dev.net_debt_to_ebitda - 1.0) * 6.0)
 
-    # Penalize liquidity weakness.
     if dev.cash_to_short_debt < 1.0:
         score -= (1.0 - dev.cash_to_short_debt) * 20.0
     if dev.quick_ratio is not None and dev.quick_ratio < 1.0:
         score -= (1.0 - dev.quick_ratio) * 15.0
 
-    # Deterioration penalties.
     if dev.net_debt_to_equity > dev.prior_net_debt_to_equity:
         score -= min(10.0, (dev.net_debt_to_equity - dev.prior_net_debt_to_equity) * 12.0)
     if dev.net_debt_to_ebitda > dev.prior_net_debt_to_ebitda:
         score -= min(8.0, (dev.net_debt_to_ebitda - dev.prior_net_debt_to_ebitda) * 4.0)
 
     score = round(max(0.0, min(100.0, score)), 1)
-
-    if score >= 70:
-        status = "Green"
-    elif score >= 40:
-        status = "Amber"
-    else:
-        status = "Red"
+    status = "Green" if score >= 70 else "Amber" if score >= 40 else "Red"
 
     drivers: list[str] = []
     if dev.net_debt_to_equity > 2.5:
@@ -97,11 +82,7 @@ def compute_health(dev: ListedDeveloper) -> dict[str, Any]:
     if not drivers:
         drivers.append("Balance sheet and liquidity metrics are broadly stable.")
 
-    return {
-        "health_score": score,
-        "status": status,
-        "drivers": drivers,
-    }
+    return {"health_score": score, "status": status, "drivers": drivers}
 
 
 def classify_news(text: str, companies: list[str]) -> dict[str, Any]:
@@ -117,29 +98,7 @@ def classify_news(text: str, companies: list[str]) -> dict[str, Any]:
         severity = "info"
 
     entity_hits = [company for company in companies if re.search(re.escape(company), text, flags=re.I)]
-
-    return {
-        "tags": tags,
-        "severity": severity,
-        "entities": entity_hits,
-    }
-
-
-def make_macro() -> dict[str, Any]:
-    months = [f"2024-{m:02d}" for m in range(1, 13)]
-
-    hdb_resale_index = [174.2, 175.3, 176.7, 177.8, 178.1, 178.9, 179.8, 180.4, 181.0, 181.7, 182.4, 183.1]
-    private_home_index = [190.0, 190.6, 191.2, 191.8, 192.5, 193.3, 194.1, 194.8, 195.2, 195.7, 196.1, 196.8]
-    mortgage_rate_3m = [3.62, 3.58, 3.51, 3.44, 3.41, 3.35, 3.31, 3.27, 3.24, 3.19, 3.14, 3.08]
-
-    return {
-        "updated_at": datetime.now(timezone.utc).isoformat(),
-        "series": {
-            "hdb_resale_index": {"label": "HDB Resale Price Index", "x": months, "y": hdb_resale_index},
-            "private_home_index": {"label": "Private Residential Price Index", "x": months, "y": private_home_index},
-            "mortgage_rate_3m": {"label": "3M Mortgage Proxy Rate (%)", "x": months, "y": mortgage_rate_3m},
-        },
-    }
+    return {"tags": tags, "severity": severity, "entities": entity_hits}
 
 
 def make_listed() -> dict[str, Any]:
@@ -158,7 +117,6 @@ def make_listed() -> dict[str, Any]:
 
     rows: list[dict[str, Any]] = []
     for dev in developers:
-        health = compute_health(dev)
         rows.append(
             {
                 "ticker": dev.ticker,
@@ -169,106 +127,52 @@ def make_listed() -> dict[str, Any]:
                 "quick_ratio": dev.quick_ratio,
                 "prior_net_debt_to_equity": dev.prior_net_debt_to_equity,
                 "prior_net_debt_to_ebitda": dev.prior_net_debt_to_ebitda,
-                **health,
+                **compute_health(dev),
             }
         )
 
-    return {
-        "updated_at": datetime.now(timezone.utc).isoformat(),
-        "companies": [d.company for d in developers],
-        "rows": rows,
-    }
+    return {"updated_at": datetime.now(timezone.utc).isoformat(), "companies": [d.company for d in developers], "rows": rows}
 
 
 def make_news(company_names: list[str]) -> dict[str, Any]:
     base = date(2025, 1, 15)
     raw_items = [
-        {
-            "title": "City Developments secures bridge loan ahead of debt maturity",
-            "outlet": "Business Times",
-            "summary": "The group refinanced a major facility as liquidity planning intensifies.",
-            "url": "https://example.com/news/cdl-bridge-loan",
-        },
-        {
-            "title": "GuocoLand reports construction delay at flagship mixed-use project",
-            "outlet": "The Edge Singapore",
-            "summary": "Delay may push TOP timelines and raise carrying costs.",
-            "url": "https://example.com/news/guocoland-delay",
-        },
-        {
-            "title": "Mapletree Pan Asia Commercial Trust receives covenant waiver from lenders",
-            "outlet": "Reuters",
-            "summary": "Waiver tied to temporary covenant breach after valuation decline.",
-            "url": "https://example.com/news/mpact-waiver",
-        },
-        {
-            "title": "CapitaLand Investment sees stable sales despite price cut campaign",
-            "outlet": "CNA",
-            "summary": "Bulk sale discount strategy used to sustain momentum in select assets.",
-            "url": "https://example.com/news/cli-price-cut",
-        },
-        {
-            "title": "Legal filing seeks winding up of small contractor tied to project",
-            "outlet": "Straits Times",
-            "summary": "No immediate default by listed sponsor was disclosed.",
-            "url": "https://example.com/news/winding-up-filing",
-        },
-        {
-            "title": "UOL Group reports resilient liquidity position in latest update",
-            "outlet": "SG Investors",
-            "summary": "Management highlighted conservative balance sheet and rating stability.",
-            "url": "https://example.com/news/uol-liquidity",
-        },
+        {"title": "City Developments secures bridge loan ahead of debt maturity", "outlet": "Business Times", "summary": "The group refinanced a major facility as liquidity planning intensifies.", "url": "https://example.com/news/cdl-bridge-loan"},
+        {"title": "GuocoLand reports construction delay at flagship mixed-use project", "outlet": "The Edge Singapore", "summary": "Delay may push TOP timelines and raise carrying costs.", "url": "https://example.com/news/guocoland-delay"},
+        {"title": "Mapletree Pan Asia Commercial Trust receives covenant waiver from lenders", "outlet": "Reuters", "summary": "Waiver tied to temporary covenant breach after valuation decline.", "url": "https://example.com/news/mpact-waiver"},
+        {"title": "CapitaLand Investment sees stable sales despite price cut campaign", "outlet": "CNA", "summary": "Bulk sale discount strategy used to sustain momentum in select assets.", "url": "https://example.com/news/cli-price-cut"},
+        {"title": "Legal filing seeks winding up of small contractor tied to project", "outlet": "Straits Times", "summary": "No immediate default by listed sponsor was disclosed.", "url": "https://example.com/news/winding-up-filing"},
+        {"title": "UOL Group reports resilient liquidity position in latest update", "outlet": "SG Investors", "summary": "Management highlighted conservative balance sheet and rating stability.", "url": "https://example.com/news/uol-liquidity"},
     ]
 
-    items: list[dict[str, Any]] = []
+    items = []
     for i, row in enumerate(raw_items):
         text = f"{row['title']} {row['summary']}"
-        classification = classify_news(text, company_names)
-        items.append(
-            {
-                **row,
-                "published_at": base.isoformat() if i == 0 else (base.replace(day=min(28, base.day + i))).isoformat(),
-                **classification,
-            }
-        )
+        items.append({
+            **row,
+            "published_at": base.isoformat() if i == 0 else (base.replace(day=min(28, base.day + i))).isoformat(),
+            **classify_news(text, company_names),
+        })
 
     RNG.shuffle(items)
     items.sort(key=lambda x: x["published_at"], reverse=True)
-
-    return {
-        "updated_at": datetime.now(timezone.utc).isoformat(),
-        "items": items,
-    }
+    return {"updated_at": datetime.now(timezone.utc).isoformat(), "items": items}
 
 
 def write_json(filename: str, payload: dict[str, Any]) -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    path = DATA_DIR / filename
-    path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    (DATA_DIR / filename).write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
 def main() -> None:
     listed = make_listed()
     news = make_news(listed.get("companies", []))
-    macro = make_macro()
+    macro, status = run_fetch()
 
     write_json("listed.json", listed)
     write_json("news.json", news)
     write_json("macro.json", macro)
-    write_json(
-        "status.json",
-        {
-            "updated_at": datetime.now(timezone.utc).isoformat(),
-            "pipeline": "mock_build",
-            "ok": True,
-            "errors": [],
-            "notes": [
-                "POC mode with deterministic mock data.",
-                "TODO: Replace mock fetchers with live connectors for macro, news, and ratios.",
-            ],
-        },
-    )
+    write_json("status.json", status)
 
 
 if __name__ == "__main__":

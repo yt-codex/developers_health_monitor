@@ -1,98 +1,197 @@
 {
-  "updated_at": "2026-02-20T16:17:48.170271+00:00",
+  "meta": {
+    "generated_utc": "2026-02-20T16:57:31Z",
+    "sources": {
+      "data_gov_sg": "https://data.gov.sg/api/action/package_search",
+      "singstat": "https://tablebuilder.singstat.gov.sg/api/table"
+    },
+    "notes": [
+      "Series are resolved dynamically from data.gov.sg using keyword queries.",
+      "Missing datasets are tolerated; series remain present with empty data arrays."
+    ]
+  },
   "series": {
-    "hdb_resale_index": {
-      "label": "HDB Resale Price Index",
-      "x": [
-        "2024-01",
-        "2024-02",
-        "2024-03",
-        "2024-04",
-        "2024-05",
-        "2024-06",
-        "2024-07",
-        "2024-08",
-        "2024-09",
-        "2024-10",
-        "2024-11",
-        "2024-12"
-      ],
-      "y": [
-        174.2,
-        175.3,
-        176.7,
-        177.8,
-        178.1,
-        178.9,
-        179.8,
-        180.4,
-        181.0,
-        181.7,
-        182.4,
-        183.1
-      ]
+    "sora_level": {
+      "display_name": "SORA Level",
+      "frequency": "daily",
+      "unit": "%",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
     },
-    "private_home_index": {
-      "label": "Private Residential Price Index",
-      "x": [
-        "2024-01",
-        "2024-02",
-        "2024-03",
-        "2024-04",
-        "2024-05",
-        "2024-06",
-        "2024-07",
-        "2024-08",
-        "2024-09",
-        "2024-10",
-        "2024-11",
-        "2024-12"
-      ],
-      "y": [
-        190.0,
-        190.6,
-        191.2,
-        191.8,
-        192.5,
-        193.3,
-        194.1,
-        194.8,
-        195.2,
-        195.7,
-        196.1,
-        196.8
-      ]
+    "sgs_yield_2y": {
+      "display_name": "SGS Yield 2Y",
+      "frequency": "daily",
+      "unit": "%",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
     },
-    "mortgage_rate_3m": {
-      "label": "3M Mortgage Proxy Rate (%)",
-      "x": [
-        "2024-01",
-        "2024-02",
-        "2024-03",
-        "2024-04",
-        "2024-05",
-        "2024-06",
-        "2024-07",
-        "2024-08",
-        "2024-09",
-        "2024-10",
-        "2024-11",
-        "2024-12"
-      ],
-      "y": [
-        3.62,
-        3.58,
-        3.51,
-        3.44,
-        3.41,
-        3.35,
-        3.31,
-        3.27,
-        3.24,
-        3.19,
-        3.14,
-        3.08
-      ]
+    "sgs_yield_10y": {
+      "display_name": "SGS Yield 10Y",
+      "frequency": "daily",
+      "unit": "%",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
+    },
+    "sgs_yield_1y": {
+      "display_name": "T-bill / SGS Yield 1Y",
+      "frequency": "daily",
+      "unit": "%",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
+    },
+    "private_resi_price_index": {
+      "display_name": "Private Residential Property Price Index",
+      "frequency": "quarterly",
+      "unit": "index",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
+    },
+    "private_resi_rental_index": {
+      "display_name": "Private Residential Rental Index",
+      "frequency": "quarterly",
+      "unit": "index",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
+    },
+    "private_resi_transactions": {
+      "display_name": "Private Residential Transactions",
+      "frequency": "quarterly",
+      "unit": "transactions",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
+    },
+    "dev_sales_uncompleted_sold": {
+      "display_name": "Uncompleted Private Residential Units Sold by Developers",
+      "frequency": "quarterly",
+      "unit": "units",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
+    },
+    "dev_sales_completed_sold": {
+      "display_name": "Completed Private Residential Units Sold by Developers",
+      "frequency": "quarterly",
+      "unit": "units",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
+    },
+    "supply_starts": {
+      "display_name": "Private Residential Units Started",
+      "frequency": "quarterly",
+      "unit": "units",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
+    },
+    "supply_completions": {
+      "display_name": "Private Residential Units Completed",
+      "frequency": "quarterly",
+      "unit": "units",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
+    },
+    "supply_under_construction": {
+      "display_name": "Private Residential Units Under Construction",
+      "frequency": "quarterly",
+      "unit": "units",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
+    },
+    "supply_available_vacant": {
+      "display_name": "Available-Vacant Private Residential Units",
+      "frequency": "quarterly",
+      "unit": "units",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
+    },
+    "construction_material_prices": {
+      "display_name": "Construction Material Market Prices",
+      "frequency": "monthly",
+      "unit": "index_or_price",
+      "source": {
+        "name": "unavailable",
+        "dataset_title": "",
+        "resource_url": ""
+      },
+      "last_observation_period": null,
+      "data": [],
+      "note": "No matching CSV dataset resource found"
     }
   }
 }

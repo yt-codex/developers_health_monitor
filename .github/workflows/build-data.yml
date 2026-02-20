@@ -20,8 +20,14 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Generate data JSON files
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate listed/news JSON files
         run: python scripts/build_data.py
+
+      - name: Generate macro/status JSON files
+        run: python scripts/fetch_macro.py --out public/data/macro.json --status public/data/status.json
 
       - name: Sync public to docs
         run: |

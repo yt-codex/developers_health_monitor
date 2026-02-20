@@ -1,10 +1,102 @@
 {
-  "updated_at": "2026-02-20T16:17:48.171265+00:00",
-  "pipeline": "mock_build",
-  "ok": true,
-  "errors": [],
-  "notes": [
-    "POC mode with deterministic mock data.",
-    "TODO: Replace mock fetchers with live connectors for macro, news, and ratios."
+  "last_run_utc": "2026-02-20T16:57:31Z",
+  "ok": false,
+  "series_status": {
+    "sora_level": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    },
+    "sgs_yield_2y": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    },
+    "sgs_yield_10y": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    },
+    "sgs_yield_1y": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    },
+    "private_resi_price_index": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    },
+    "private_resi_rental_index": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    },
+    "private_resi_transactions": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    },
+    "dev_sales_uncompleted_sold": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    },
+    "dev_sales_completed_sold": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    },
+    "supply_starts": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    },
+    "supply_completions": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    },
+    "supply_under_construction": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    },
+    "supply_available_vacant": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    },
+    "construction_material_prices": {
+      "ok": false,
+      "last_period": null,
+      "error": "No dataset match"
+    }
+  },
+  "source_status": {
+    "data_gov_sg": {
+      "ok": false,
+      "error": "HTTPSConnectionPool(host='data.gov.sg', port=443): Max retries exceeded with url: /api/action/package_search?q=construction+materials+market+prices+monthly&rows=10 (Caused by ProxyError('Unable to connect to proxy', OSEr..."
+    },
+    "singstat": {
+      "ok": true,
+      "error": ""
+    }
+  },
+  "errors": [
+    "No dataset match",
+    "No dataset match",
+    "No dataset match",
+    "No dataset match",
+    "No dataset match",
+    "No dataset match",
+    "No dataset match",
+    "No dataset match",
+    "No dataset match",
+    "No dataset match",
+    "No dataset match",
+    "No dataset match",
+    "No dataset match",
+    "No dataset match"
   ]
 }
